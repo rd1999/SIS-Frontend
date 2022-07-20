@@ -1,11 +1,17 @@
-import logo from './logo.svg';
+import "bootstrap/dist/css/bootstrap.min.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
 import './App.css';
+import Login from './pages/Login';
+
 
 function App() {
   return (
-    <div className="App">
-			<Login />
-		</div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
