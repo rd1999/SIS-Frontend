@@ -1,0 +1,19 @@
+.studentTable {
+  margin-left: 0;
+  width: 1000px;
+  height: auto;
+  margin-top: 60px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px gray;
+  margin-left: 150px;
+  text-align: left; 
+  background-color: #F1EEE9;
+}
+  
+  
+td {
+  height: 30px;
+  padding-left: 80px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}

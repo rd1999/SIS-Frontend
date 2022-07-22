@@ -1,13 +1,14 @@
 .App {
   background-color: white;
+  text-align: center;
+  background-color: #CFD2CF;
 }
 
 .Auth-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  height: 93.7vh;
 }
 
 .Auth-form {
@@ -16,7 +17,7 @@
   padding-top: 30px;
   padding-bottom: 20px;
   border-radius: 8px;
-  background-color: white;
+  background-color: #F1EEE9;
 }
 
 .Auth-form-content {
