@@ -15,6 +15,7 @@ import ViewStudentQueries from "./pages/admin/View_Student_Queries";
 import ViewStudent from "./pages/admin/View_Student";
 import StudentHeader from "./components/Student_Header";
 import LoginHeader from "./components/Login_Header";
+import QueryResponse from "./pages/admin/Query_Response";
 
 
 function App() {
@@ -31,10 +32,11 @@ function App() {
 
             <Route path="/admin/add-student" element={<AddStudent />} />
             <Route path="/admin" element={<AdminHome />} />
-            <Route path="/admin/update-student" element={<UpdateStudent />} />
+            <Route path="/admin/update-student/:id" element={<UpdateStudent />} />
             <Route path="/admin/view-leave-applications" element={<ViewLeaveApplications />} />
             <Route path="/admin/view-student-queries" element={<ViewStudentQueries />} />
-            <Route path="/admin/view-student" element={<ViewStudent />} />
+            <Route path="/admin/view-student/:id" element={<ViewStudent />} />
+            <Route path="/admin/view-student-queries/:id" element={<QueryResponse />} />
 
             {/* Student routes */}
 

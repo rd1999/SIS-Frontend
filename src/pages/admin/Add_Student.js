@@ -1,7 +1,14 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react";
+import {useNavigate} from 'react-router-dom'
+import axios from "axios";
 import AdminHeader from "../../components/Admin_Header";
+import authHeader from "../../services/auth-header";
+import AuthService from "../../services/auth-service";
+import UserService from "../../services/user-service";
 
 const AddStudent = (props) => {
+
+    const navigate = useNavigate();
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -11,6 +18,43 @@ const AddStudent = (props) => {
     const [phNo, setPhNo] = useState('');
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
+
+    const addStudent = (e) => {
+
+        e.preventDefault();
+        let student = {
+            "first_name": firstName,
+            "last_name": lastName,
+            "email": email,
+            "age": age,
+            "cls": studentClass,
+            "gender": gender,
+            "address": address,
+            "phNo": phNo
+        };
+
+        axios.post('http://localhost:8181/api/v1/students', student, {headers : authHeader()}).then((res) => {
+            AuthService.register(email, "password", firstName, lastName, res.data.id).then(res => navigate('/admin'))
+        })
+    }
+
+    useEffect(() => {
+        UserService.getAdminBoard().then(
+            res => {
+                if(res.data === "admin"){
+                    // getStudents();
+                }
+                else{
+                    alert("You are not authenticated to view this page")
+                }
+            },
+            error => {
+                alert("You are not authenticated as admin")
+                navigate('/student')
+            }
+        )
+        // getStudents();
+    },[]);
 
     return (
         <div>
@@ -75,7 +119,7 @@ const AddStudent = (props) => {
 
                     <div className="form-group mt-3">
                         <label>Address</label>
-                        <textarea 
+                        <textarea
                             className="form-control mt-1"
                             name="address"
                             onChange={(value) => setAddress(value.target.value)}
@@ -107,7 +151,7 @@ const AddStudent = (props) => {
                     </div>
 
                     <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">
+                        <button onClick={addStudent} type="submit" className="btn btn-primary">
                             Add Student
                         </button>
                     </div>

@@ -1,41 +1,51 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminHeader from '../../components/Admin_Header';
-// import axios from 'axios';
+import axios from 'axios';
+import UserService from '../../services/user-service';
+import authHeader from '../../services/auth-header';
 
 const AdminHome = () => {
 
     const [students, setStudents] = useState([]);
     const navigate = useNavigate();
 
-    const getStudents = () => {
-        // const { data } = await axios.get('http://localhost:8181/api/v1/employees');
-        // console.log(data);
-        const data = [
-            {
-                id: 1,
-                firstName: 'Ritwik',
-                lastName: 'Das',
-            },
-            
-        ]
+    const getStudents = async () => {
+        let {data} = await axios.get('http://localhost:8181/api/v1/students', {headers: authHeader()})
+        console.log(data);
         setStudents(data);
       };
 
     useEffect(() => {
-        getStudents();
+        UserService.getAdminBoard().then(
+            res => {
+                if(res.data === "admin"){
+                    getStudents();
+                }
+                else{
+                    alert("You are not authenticated to view this page")
+                }
+            },
+            error => {
+                alert("You are not authenticated as admin")
+                navigate('/student')
+            }
+        )
+        // getStudents();
     },[]);
 
     const editStudent = (id) => {
-        navigate(`/admin/update-student`);
+        navigate(`/admin/update-student/${id}`);
     }
 
     const viewStudentDetails = (id) => {
-        navigate(`/admin/view-student`);
+        navigate(`/admin/view-student/${id}`);
     }
 
-    const deleteStudent = (id) => {
-        // navigate(`/add-employee/${id}`);
+    const deleteStudent = async (id) => {
+        await axios.delete(`http://localhost:8181/api/v1/students/${id}`, {headers: authHeader()}).then((res) => navigate('/admin'));
+        window.location.reload(false);
+        
     }
 
     return <div>
@@ -59,8 +69,8 @@ const AdminHome = () => {
                                 student => 
                                 <tr key={student.id}>
                                     <td>{student.id}</td>
-                                    <td>{student.firstName}</td>
-                                    <td>{student.lastName}</td>
+                                    <td>{student.first_name}</td>
+                                    <td>{student.last_name}</td>
                                     <td>
                                         <button onClick={() => viewStudentDetails(student.id)} className="btn btn-info">View Details</button>
                                         <button style={{marginLeft: 10}} onClick={() => editStudent(student.id)} className="btn btn-info">Update</button>

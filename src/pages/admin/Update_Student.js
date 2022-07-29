@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from "react"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
+import AdminHeader from "../../components/Admin_Header";
+import axios from "axios";
+import authHeader from "../../services/auth-header";
+import UserService from "../../services/user-service";
 
 const UpdateStudent = (props) => {
 
@@ -13,37 +17,63 @@ const UpdateStudent = (props) => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
-    const getStudents = () => {
-        // const { data } = await axios.get('http://localhost:8181/api/v1/employees');
-        // console.log(data);
-        const data =
-            {
-                id: 1,
-                firstName: 'Ritwik',
-                lastName: 'Das',
-                studentClass: 5,
-                age: 11,
-                address: 'njekfmklemfklremkflremgklmgkl',
-                phNo: 9382215382,
-                gender: 'male',
-                email: 'dasritwik73@gmail.com'
-            }
-        setFirstName(data.firstName);
-        setLastName(data.lastName)
-        setStudentClass(data.studentClass)
-        setAge(data.age)
-        setAddress(data.address)
-        setPhNo(data.phNo)
-        setGender(data.gender)
-        setEmail(data.email)
-      };
+    const id = useParams();
+
+    const updateStudent = async (e) => {
+
+        e.preventDefault();
+        let student = {
+            "first_name": firstName,
+            "last_name": lastName,
+            "email": email,
+            "age": age,
+            "cls": studentClass,
+            "gender": gender,
+            "address": address,
+            "phNo": phNo
+        };
+
+        await axios.put(`http://localhost:8181/api/v1/students/${id.id}`, student, {headers: authHeader()}).then(() => {
+            navigate('/admin');
+        })
+
+    }
+
+    const getStudents = async () => {
+        await axios.get(`http://localhost:8181/api/v1/students/${id.id}`, {headers: authHeader()}).then((res) => {
+            let data = res.data;
+            setFirstName(data.first_name);
+            setLastName(data.last_name)
+            setStudentClass(data.cls)
+            setAge(data.age)
+            setAddress(data.address)
+            setPhNo(data.phNo)
+            setGender(data.gender)
+            setEmail(data.email)
+        })
+    }
 
     useEffect(() => {
-        getStudents();
+        UserService.getAdminBoard().then(
+            res => {
+                if(res.data === "admin"){
+                    getStudents();
+                }
+                else{
+                    alert("You are not authenticated to view this page")
+                }
+            },
+            error => {
+                alert("You are not authenticated as admin")
+                navigate('/student')
+            }
+        )
+        // getStudents();
     },[]);
 
     return (
-                
+        <div>
+        <AdminHeader />
         <div className="Auth-form-container" style={{textAlign: 'left', paddingTop: 50, paddingBottom: 50, height: '120vh'}}>
             <form className="Auth-form">
                 <div className="Auth-form-content">
@@ -74,9 +104,19 @@ const UpdateStudent = (props) => {
                     <div className="form-group mt-3">
                         <label>Gender</label>
                         <div onChange={(value) => setGender(value.target.value)}>
-                            <input type="radio" value="male" name="gender" /> Male &emsp;
+                            {gender === "male" 
+                            ? 
+                            <div>
+                            <input type="radio" value="male" name="gender" defaultChecked /> Male &emsp;
+                            <input type="radio" value="female" name="gender" /> Female 
+                            </div>
+                            :
+                            <div>
+                             <input type="radio" value="male" name="gender" /> Male &emsp;
                             
-                            <input type="radio" value="female" name="gender" /> Female
+                            <input type="radio" value="female" name="gender" defaultChecked /> Female
+                            </div>}
+                            
                         </div>
                     </div>
 
@@ -136,13 +176,14 @@ const UpdateStudent = (props) => {
                     </div>
 
                     <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">
+                        <button onClick={updateStudent} type="submit" className="btn btn-primary">
                             Save
                         </button>
                     </div>
                     <p className="forgot-password text-right mt-2"></p>
                 </div>                
             </form>
+        </div>
         </div>
             
     )
