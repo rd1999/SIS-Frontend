@@ -1,6 +1,11 @@
 import React from "react";
+import AuthService from "../services/auth-service";
 
 const AdminHeader = () => {
+
+    const logOut = () => {
+        AuthService.logout()
+    }
 
     return <div>
         <header>
@@ -18,6 +23,9 @@ const AdminHeader = () => {
                     </li>
                     <li className="nav-item">
                         <a className="nav-link active" aria-current="page" href="http://localhost:3000/admin/view-leave-applications">View leave applications</a>
+                    </li>
+                    <li className="nav-item">
+                        <a onClick={() => logOut()} className="nav-link active" aria-current="page" href="http://localhost:3000">Logout</a>
                     </li>
                 </ul>
             </nav>

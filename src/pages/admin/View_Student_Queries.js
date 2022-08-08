@@ -32,21 +32,25 @@ import UserService from "../../services/user-service";
             // ]
             setQueries(queries);
           };
-    
-          UserService.getAdminBoard().then(
-            res => {
-                if(res.data === "admin"){
-                    getQueries();
+
+          useEffect(() => {
+
+            UserService.getAdminBoard().then(
+                res => {
+                    if(res.data === "admin"){
+                        getQueries();
+                    }
+                    else{
+                        alert("You are not authenticated to view this page")
+                    }
+                },
+                error => {
+                    alert("You are not authenticated as admin")
+                    navigate('/student')
                 }
-                else{
-                    alert("You are not authenticated to view this page")
-                }
-            },
-            error => {
-                alert("You are not authenticated as admin")
-                navigate('/student')
-            }
-        )
+            )
+
+          },[])
     
         const viewQueries = (id) => {
             navigate(`/admin/view-student-queries/${id}`);

@@ -33,20 +33,24 @@ const ViewLeaveApplications = () => {
         setLeaves(leaves);
       };
 
-      UserService.getAdminBoard().then(
-        res => {
-            if(res.data === "admin"){
-                getLeaves();
+      useEffect(() => {
+
+        UserService.getAdminBoard().then(
+            res => {
+                if(res.data === "admin"){
+                    getLeaves();
+                }
+                else{
+                    alert("You are not authenticated to view this page")
+                }
+            },
+            error => {
+                alert("You are not authenticated as admin")
+                navigate('/student')
             }
-            else{
-                alert("You are not authenticated to view this page")
-            }
-        },
-        error => {
-            alert("You are not authenticated as admin")
-            navigate('/student')
-        }
-    )
+        )
+
+      },[])
 
 
 

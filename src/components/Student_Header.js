@@ -1,6 +1,11 @@
 import React from "react";
+import AuthService from "../services/auth-service";
 
 const StudentHeader = () => {
+
+    const logOut = () => {
+        AuthService.logout()
+    }
 
     return <div>
         <header>
@@ -15,6 +20,9 @@ const StudentHeader = () => {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="http://localhost:3000/student/request-leave">Request for Leave</a>
+                    </li>
+                    <li className="nav-item">
+                        <a onClick={() => logOut()} className="nav-link active" aria-current="page" href="http://localhost:3000">Logout</a>
                     </li>
                 </ul>
             </nav>
